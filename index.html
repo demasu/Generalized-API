@@ -1,0 +1,158 @@
+<!DOCTYPE HTML>
+<!--
+    Massively by HTML5 UP
+    html5up.net | @ajlkn
+    Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+    <head>
+        <title>Massively by HTML5 UP</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="assets/css/main.css" />
+        <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    </head>
+    <body class="is-preload">
+        
+        <!-- Wrapper -->
+        <div id="wrapper" class="fade-in">
+
+                <!-- Header -->
+                <header id="header">
+                    <a href="index.html" class="logo">Input</a>
+                </header>
+
+                <!-- Nav -->
+                <nav id="nav">
+                    <ul class="links">
+                        <li class="active"><a href="index.html">This is Massively</a></li>
+                        <li><a href="verify.html" class="logo">Verify</a></li>
+                        <li><a href="generic.html">Generic Page</a></li>
+                        <li><a href="elements.html">Elements Reference</a></li>
+                    </ul>
+                    <ul class="icons">
+                        <li>
+                            <a href="https://git.cpanel.net/joshua.brandt/generalized-api" class="icon fa-github">
+                                <span class="label">GitLab</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Main -->
+                <div id="main">
+
+                    <div id="form">
+                        <h2>Enter in the API information</h2>
+                        <form>
+                            <div class="row gtr-uniform">
+                                <div class="col-12">
+                                    <input type="url" name="Base URL" id="base-url" value="" pattern="https://.*" />
+                                    <label for="base-url">API Base URL</label>
+                                </div>
+                                <div class="col-12">
+                                    <input type="text" name="Username" id="username" value="" />
+                                    <label for="username">API Username</label>
+                                </div>
+                                <div class="col-12">
+                                    <input type="password" name="Password" id="password" value="" />
+                                    <label for="password">API Password</label>
+                                </div>
+                                <h3>API Method Options</h3>
+                                <div class="col-12">
+                                    <select name="Query method" id="query-method">
+                                        <option value="">- API Query Method -</option>
+                                        <option value="post">POST</option>
+                                        <option value="get">GET</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <select name="Query Type" id="query-type">
+                                        <option value="">- Argument Encoding -</option>
+                                        <option value="form">POST: Form URL Encoded</option>
+                                        <option value="url">GET: URI Encoded Parameters</option>
+                                    </select>
+                                </div>
+                                <h3>Individual Calls</h3>
+                                <br />
+                                <div class="col-12">
+                                    <h4 id="order-heading">Order Call</h4>
+                                    <input type="text" name="Order call" id="order-call">
+                                    <label for="order-call">Method to order an item</label>
+                                </div>
+                                <div class="row gtr-uniform" id="order-param-container">
+                                    <div class="col-6">
+                                        <input type="text" name="Order Param 1" id="order-param-1">
+                                        <label for="order-param-1">Parameter One</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="checkbox" name="Required Param 1" id="required-order-param-1">
+                                        <label for="required-order-param-1">Required</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" name="Order Param 2" id="order-param-2">
+                                        <label for="order-param-2">Parameter Two</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="checkbox" name="Required Param 2" id="required-order-param-2">
+                                        <label for="required-order-param-2">Required</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <a class="button primary small" href="#" id="add-order-param" onclick="addOrderField()">Add Parameter</a>
+                                    </div>
+                                </div>
+                                <div class="col-12"></div>
+                                <div class="col-12">
+                                    <h4>Cancel Call</h4>
+                                    <input type="text" name="Cancel call" id="cancel-call">
+                                    <label for="cancel-call">Method to cancel an item</label>
+                                </div>
+                                <div class="row gtr-uniform" id="cancel-param-container">
+                                    <div class="col-6">
+                                        <input type="text" name="Cancel Param 1" id="cancel-param-1">
+                                        <label for="cancel-param-1">Parameter One</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="checkbox" name="Required Param 1" id="require-cancel-param-1">
+                                        <label for="require-cancel-param-1">Required</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" name="Cancel Param 2" id="cancel-param-2">
+                                        <label for="cancel-param-2">Parameter Two</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="checkbox" name="Required Param 2" id="require-cancel-param-2">
+                                        <label for="require-cancel-param-2">Required</label>
+                                    </div>
+                                    <div class="col-12">
+                                        <a class="button primary small" href="#" id="add-cancel-param" onclick="addCancelField()">Add Parameter</a>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <input class="primary" type="submit" value="Save" id="submit-button">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <footer id="footer">
+                    <section>
+                        This is just a test. Don't look too closely.
+                    </section>
+                </footer>
+
+                <!-- Copyright -->
+                <div id="copyright">
+                    <ul><li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+                </div>
+
+        </div>
+
+        <!-- Scripts -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/numberToWords.min.js"></script>
+        <script src="assets/js/main.js"></script>
+    </body>
+</html>
