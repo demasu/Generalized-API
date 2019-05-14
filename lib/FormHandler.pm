@@ -24,9 +24,12 @@ post '/' => sub {
     my $api_results = parse_form($stuff);
     print STDERR "# FormHandler.pm: \n" . Dumper( \$api_results ) . "\n";
 
-    write_to_json($api_results);
-
-    send_file 'success.html';
+    if ( write_to_json($api_results) ) {
+        send_file 'success.html';
+    }
+    else {
+        send_file 'failure.html';
+    }
 
 };
 
@@ -102,7 +105,7 @@ sub write_to_json {
     print $fh $json;
     close $fh;
 
-    return;
+    return 1;
 }
 
 1;
