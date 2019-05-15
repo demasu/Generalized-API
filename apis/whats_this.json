@@ -1,0 +1,1 @@
+{"username":"username","base_url":"https://example.tld","cancel":{"params":[{"name":"ip_address","required":null},{"name":"id","required":"on"}],"call":"cancel"},"order":{"call":"order","params":[{"required":null,"name":"quantity"},{"required":"on","name":"type"}]},"password":"password","query_method":"post"}

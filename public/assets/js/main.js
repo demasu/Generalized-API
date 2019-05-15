@@ -35,7 +35,7 @@ function addRow( type ) {
     var id = boxDiv.firstChild.getAttribute("id");
     id = '#' + id;
     button[0].setAttribute("href", `#${id}`);
-    
+
     return false;
 }
 
@@ -49,7 +49,7 @@ function addTextDiv ( type ) {
 
     // Add classes and IDs
     newOuterDiv.setAttribute( "class", "col-6" );
-    
+
     newInput.setAttribute( "type", "text" );
     newInput.setAttribute( "name", `${formattedType} Param ${paramCounts[type]}` );
     newInput.setAttribute( "id", `${type}-param-${paramCounts[type]}`);

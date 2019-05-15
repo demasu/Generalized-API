@@ -39,6 +39,34 @@ get '/verify' => sub {
     send_file 'verify.html';
 };
 
+get '/api/:api/data' => sub {
+    if ( request->is_ajax ) {
+        header( 'Content-Type' => 'application/json' );
+        my $api = route_parameters->get('api');
+        my $dir = "$FindBin::Bin/../apis/";
+        my $file = $dir . $api . '.json';
+
+        open( my $fh, "<", $file ) or die "Unable to open file: $!";
+        my $json = <$fh>;
+        close $fh;
+
+        return $json;
+    }
+    else {
+        send_file 'failure.html';
+    }
+};
+
+get '/api/list' => sub {
+    print STDERR "# FormHandler.pm: In the api/list sub\n";
+    my $list = get_api_list();
+    print STDERR "# FormHandler.pm: Got the list\n";
+    my $json = JSON::MaybeXS::encode_json($list);
+    print STDERR "# FormHandler.pm: Converted to JSON\n";
+
+    return $json;
+};
+
 start;
 
 
@@ -90,7 +118,8 @@ sub write_to_json {
 
     my $dir  = "$FindBin::Bin/../apis/";
     my $name = delete $data->{'api_name'};
-    $name =~ s/[^a-zA-Z0-9]//g;
+    $name =~ s/\s+/_/g;
+    $name =~ s/[^a-zA-Z0-9_]//g;
     $name = lc($name);
 
     my $file = $dir . $name . '.json';
@@ -106,6 +135,26 @@ sub write_to_json {
     close $fh;
 
     return 1;
+}
+
+sub get_api_list {
+    my $path = "$FindBin::Bin/../apis";
+
+    my @files;
+    opendir( my $dir, $path ) or die "Unable to open directory: $!";
+    while ( my $file = readdir($dir) ) {
+        next if $file eq '.';
+        next if $file eq '..';
+        print STDERR "# FormHandler.pm: File is: $file\n";
+        if ( -f ($path . '/' . $file) ) {
+            push @files, $file;
+        }
+    }
+    closedir $dir;
+    print STDERR "# FormHandler.pm: Files are:\n";
+    print STDERR "# FormHandler.pm: get_api_list: \n" . Dumper( \@files ) . "\n";
+
+    return \@files;
 }
 
 1;

@@ -45,9 +45,12 @@
                         <form action="/verify" method="post">
                             <div class="row gtr-uniform">
                                 <div class="col-12">
-                                    <select name="api">
+                                    <select name="api" id="api-list">
                                         <option value="">- Select API -</option>
                                     </select>
+                                </div>
+                                <div class="col-12">
+                                    <input class="primary" type="submit" value="Verify" id="submit-button">
                                 </div>
                             </div>
                         </form>
@@ -70,7 +73,6 @@
 
         <!-- Scripts -->
         <script src="assets/js/jquery.min.js"></script>
-        <script src="assets/js/numberToWords.min.js"></script>
-        <script src="assets/js/main.js"></script>
+        <script src="assets/js/verify/verify.js"></script>
     </body>
 </html>
