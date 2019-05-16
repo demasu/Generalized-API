@@ -42,7 +42,7 @@
 
                     <div id="form">
                         <h2>Which API do you want to verify?</h2>
-                        <form action="/verify" method="post">
+                        <form id="api-selector">
                             <div class="row gtr-uniform">
                                 <div class="col-12">
                                     <select name="api" id="api-list">
@@ -50,7 +50,7 @@
                                     </select>
                                 </div>
                                 <div class="col-12">
-                                    <input class="primary" type="submit" value="Verify" id="submit-button">
+                                    <input class="primary" type="submit" value="Verify" id="submit-button" disabled="disabled">
                                 </div>
                             </div>
                         </form>

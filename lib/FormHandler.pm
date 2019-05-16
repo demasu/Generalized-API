@@ -39,6 +39,14 @@ get '/verify' => sub {
     send_file 'verify.html';
 };
 
+post '/verify' => sub {
+    my $stuff = params;
+    print STDERR "# FormHandler.pm: post '/verify': \n" . Dumper( \$stuff ) . "\n";
+    my $file = $stuff->{'api'};
+    my $data = read_from_file($file);
+    return $data;
+};
+
 get '/api/:api/data' => sub {
     if ( request->is_ajax ) {
         header( 'Content-Type' => 'application/json' );
@@ -138,7 +146,7 @@ sub write_to_json {
 }
 
 sub get_api_list {
-    my $path = "$FindBin::Bin/../apis";
+    my $path = "$FindBin::Bin/../apis/";
 
     my @files;
     opendir( my $dir, $path ) or die "Unable to open directory: $!";
@@ -146,7 +154,7 @@ sub get_api_list {
         next if $file eq '.';
         next if $file eq '..';
         print STDERR "# FormHandler.pm: File is: $file\n";
-        if ( -f ($path . '/' . $file) ) {
+        if ( -f ($path . $file) ) {
             push @files, $file;
         }
     }
@@ -155,6 +163,22 @@ sub get_api_list {
     print STDERR "# FormHandler.pm: get_api_list: \n" . Dumper( \@files ) . "\n";
 
     return \@files;
+}
+
+sub read_from_file {
+    my $file = shift;
+    my $path = "$FindBin::Bin/../apis/";
+    my $full_path = $path . $file;
+
+    if ( -f $full_path ) {
+        open( my $fh, "<", $full_path ) or die "Unable to open file: $!";
+        my $json = <$fh>;
+        close $fh;
+        return $json;
+    }
+    else {
+        return "Unable to locate file.";
+    }
 }
 
 1;
