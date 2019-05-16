@@ -78,113 +78,256 @@ function addOption (item) {
 }
 
 function generateTableContents (data) {
-    console.log("In generateTableContents");
+    if ( $('#api-info-table').length != 0 ) {
+        $('#api-info-table').remove();
+    }
 
-    var jsonObj   = JSON.parse(data);
-    var newDiv    = document.createElement('div');
-    var newTable  = document.createElement('table');
-    var newRow    = document.createElement('tr');
-    var newHeader = document.createElement('th');
-    var newColumn = document.createElement('td');
+    var jsonObj  = JSON.parse(data);
+    var newDiv   = document.createElement('div');
+    var newTable = document.createElement('table');
+    var innards  = '';
 
     // Set attributes
     newDiv.setAttribute( 'id', 'api-info-table' );
     newTable.setAttribute( 'id', 'api-data' );
+    newTable.setAttribute( 'class', 'alt' );
 
-    /*************************************************************
-    * Note to self: Replace every reuse of 'newRow', 'newHeader' *
-    * and 'newColumn' with their own document.createElement      *
-    **************************************************************/
-    var headerRow = newRow;
-    var header1 = newHeader;
-    var header2 = newHeader;
-    var header3 = newHeader;
-    header1.textContent = "Function"
-    header2.textContent = "Parameter";
-    header3.textContent = "Value";
+    var groupReturn = generateColGroups();
+    innards += groupReturn;
+
+    var headReturn = generateTableHeader();
+    innards += headReturn;
+
+    var standardsReturn = generateStandardParts(jsonObj);
+    jsonObj  = standardsReturn[0];
+    innards += standardsReturn[1];
+
+    innards += generateFunctionHeader();
+
+    var funcBody        = document.createElement('tbody');
+    funcBody.innerHTML += generateFunctionBodyHeader();
+
+    $.each(jsonObj, function(key) {
+        var params = jsonObj[key].params;
+        var call   = jsonObj[key].call;
+        var completed = 0;
+        $.each(params, function(key) {
+            var row = document.createElement('tr');
+            var cols = generateParamRow(params[key], completed);
+            if ( completed == 0 ) {
+                row.innerHTML += generateFunctionCallHeader(params, call);
+                row.innerHTML += cols[0];
+                row.innerHTML += cols[1];
+            }
+            else if ( completed % 2 == 0 ) {
+                row.innerHTML += cols[0];
+                row.innerHTML += cols[1];
+            }
+            else {
+                row.innerHTML += cols[0];
+                row.innerHTML += cols[1];
+            }
+            funcBody.innerHTML += row.outerHTML;
+            completed++;
+        });
+    });
+
+    innards += funcBody.outerHTML;
+
+    newTable.innerHTML += innards;
+    newDiv.innerHTML += newTable.outerHTML;
+
+    $('#form')[0].insertAdjacentHTML( 'afterend', newDiv.outerHTML );
+}
+
+function generateStandardParts (jsonObj) {
+    var baseGroup = document.createElement('tbody');
+
+    baseGroup.innerHTML += generateRequiredHeader();
+
+    var baseReturn = generateBaseURLRow(jsonObj);
+    jsonObj = baseReturn[0];
+    baseGroup.innerHTML += baseReturn[1];
+
+    var userReturn = generateUsernameRow(jsonObj);
+    jsonObj = userReturn[0];
+    baseGroup.innerHTML += userReturn[1];
+
+    var passReturn = generatePasswordRow(jsonObj);
+    jsonObj = passReturn[0];
+    baseGroup.innerHTML += passReturn[1];
+
+    var queryReturn = generateQueryRow(jsonObj);
+    jsonObj = queryReturn[0];
+    baseGroup.innerHTML += queryReturn[1];
+
+    var rows = baseGroup.outerHTML;
+
+    return [jsonObj, rows];
+}
+
+function generateRequiredHeader () {
+    var headerRow = document.createElement('tr');
+    var header1   = document.createElement('th');
+    var header2   = document.createElement('th');
+    var header3   = document.createElement('th');
+
+    header1.setAttribute( 'class', 'small-header left alt' );
+    header2.setAttribute( 'class', 'small-header alt' );
+    header3.setAttribute( 'class', 'small-header alt' );
+
+    header2.textContent  = "Parameter";
+    header3.textContent  = "Value";
     headerRow.innerHTML += header1.outerHTML + header2.outerHTML + header3.outerHTML;
 
-    var baseRow = newRow;
-    console.log("Base row is:");
-    console.log(baseRow.outerHTML);
-    var baseFunc  = newColumn;
-    var baseParam = newColumn;
-    var baseValue = newColumn;
+    return headerRow.outerHTML;
+}
+
+function generateBaseURLRow (jsonObj) {
+    var baseRow = document.createElement('tr');
+    var baseFunc  = document.createElement('td');
+    var baseParam = document.createElement('td');
+    var baseValue = document.createElement('td');
     baseParam.textContent = 'base_url';
     baseValue.textContent = jsonObj.base_url;
     delete jsonObj.base_url;
-    console.log("Base func column is:");
-    console.log(baseFunc.outerHTML);
-    console.log("Base param column is:");
-    console.log(baseParam.outerHTML);
-    console.log("Base value column is:");
-    console.log(baseValue.outerHTML);
     baseRow.innerHTML += baseFunc.outerHTML + baseParam.outerHTML + baseValue.outerHTML;
-    console.log("Base row is:");
-    console.log(baseRow.outerHTML);
 
-    var usernameRow = newRow;
-    var userFunc    = newColumn;
-    var userParam   = newColumn;
-    var userValue   = newColumn;
+    return [jsonObj, baseRow.outerHTML];
+}
+
+function generateUsernameRow (jsonObj) {
+    var usernameRow = document.createElement('tr');
+    var userFunc    = document.createElement('td');
+    var userParam   = document.createElement('td');
+    var userValue   = document.createElement('td');
     userParam.textContent = 'username';
     userValue.textContent = jsonObj.username;
     delete jsonObj.username;
     usernameRow.innerHTML += userFunc.outerHTML + userParam.outerHTML + userValue.outerHTML;
 
-    var passRow = newRow;
-    var passFunc  = newColumn;
-    var passParam = newColumn;
-    var passValue = newColumn;
+    return [jsonObj, usernameRow.outerHTML];
+}
+
+function generatePasswordRow (jsonObj) {
+    var passRow = document.createElement('tr');
+    var passFunc  = document.createElement('td');
+    var passParam = document.createElement('td');
+    var passValue = document.createElement('td');
     passParam.textContent = 'password';
     passValue.textContent = jsonObj.password.replace(/./g, '*');
     delete jsonObj.password;
     passRow.innerHTML += passFunc.outerHTML + passParam.outerHTML + passValue.outerHTML;
 
-    var queryRow = newRow;
-    var queryFunc  = newColumn;
-    var queryParam = newColumn;
-    var queryValue = newColumn;
+    return [jsonObj, passRow.outerHTML];
+}
+
+function generateQueryRow (jsonObj) {
+    var queryRow = document.createElement('tr');
+    var queryFunc  = document.createElement('td');
+    var queryParam = document.createElement('td');
+    var queryValue = document.createElement('td');
     queryParam.textContent = 'query_method';
     queryValue.textContent = jsonObj.query_method;
     delete jsonObj.query_method;
     queryRow.innerHTML += queryFunc.outerHTML + queryParam.outerHTML + queryValue.outerHTML;
 
-    newTable.innerHTML += headerRow.outerHTML  + baseRow.outerHTML
-                       + usernameRow.outerHTML + passRow.outerHTML
-                       + queryRow.outerHTML;
+    return [jsonObj, queryRow.outerHTML];
+}
 
-    $.each(jsonObj, function(key, value) {
-        //console.log("Key:", key);
-        //console.log("Value:", value);
-        var currentRow = newRow;
-        var funcCol = newColumn;
-        funcCol.textContent = jsonObj[key].call;
-        currentRow.innerHTML += funcCol.outerHTML;
-        newTable.innerHTML += currentRow.outerHTML;
+function generateParamRow (param, num) {
+    var paramCol = document.createElement('td');
+    var valCol   = document.createElement('td');
 
+    if ( num % 2 != 0 ) {
+        paramCol.setAttribute( 'class', 'cell-no-left' );
+    }
 
-        var params = jsonObj[key].params;
-        $.each(params, function(key, value) {
-            var paramRow = newRow;
-            var funcCol  = newColumn;
-            var paramCol = newColumn;
-            var valCol   = newColumn;
+    paramCol.textContent = param.name;
+    if ( param.required == 'on' ) {
+        valCol.textContent = '(required)';
+    }
+    else {
+        valCol.textContent = '(optional)';
+    }
 
-            paramCol.textContent = params.name;
-            if ( params.required == 'on' ) {
-                valCol.textContent = '(required)';
-            }
-            else {
-                valCol.textContent = '(optional)';
-            }
-            paramRow.innerHTML += funcCol.outerHTML + paramCol.outerHTML + valCol.outerHTML;
-            newTable.innerHTML += paramRow.outerHTML;
-        });
-    });
+    return [paramCol.outerHTML, valCol.outerHTML];
+}
 
-    console.log(newTable);
-    newDiv.innerHTML += newTable.outerHTML;
+function generateColGroups () {
+    var group = document.createElement('colgroup');
+    var col   = document.createElement('col');
+    group.innerHTML += col.outerHTML + col.outerHTML + col.outerHTML;
 
-    $('#form')[0].insertAdjacentHTML( 'afterend', newDiv.outerHTML );
+    return group.outerHTML;
+}
+
+function generateTableHeader () {
+    var header     = document.createElement('thead');
+    var theadRow   = document.createElement('tr');
+
+    theadRow.setAttribute( 'class', 'header-row' );
+
+    var theadCol   = document.createElement('th');
+    var theadColh4 = document.createElement('h4');
+
+    theadCol.setAttribute( 'colspan', '3' );
+    theadCol.setAttribute( 'scope', 'colgroup' );
+    theadCol.setAttribute( 'class', 'big-header' );
+    theadColh4.textContent = 'RequiredParameters';
+    theadCol.innerHTML    += theadColh4.outerHTML;
+
+    theadRow.innerHTML  += theadCol.outerHTML;
+    header.innerHTML    += theadRow.outerHTML;
+
+    return header.outerHTML;
+}
+
+function generateFunctionHeader () {
+    var functionHeader = document.createElement('tbody');
+    var funcHeadRow    = document.createElement('tr');
+    var funcHeadCol    = document.createElement('th');
+    var funcHeadColh4  = document.createElement('h4');
+
+    funcHeadCol.setAttribute( 'colspan', '3' );
+    funcHeadCol.setAttribute( 'scope', 'colgroup' );
+    funcHeadCol.setAttribute( 'class', 'big-header alt' );
+    funcHeadRow.setAttribute( 'class', 'header-row' );
+    funcHeadColh4.textContent = 'Functions';
+
+    funcHeadCol.innerHTML    += funcHeadColh4.outerHTML;
+    funcHeadRow.innerHTML    += funcHeadCol.outerHTML;
+    functionHeader.innerHTML += funcHeadRow.outerHTML;
+
+    return functionHeader.outerHTML;
+}
+
+function generateFunctionBodyHeader () {
+    var funcBodyHeadRow   = document.createElement('tr');
+    var funcBodyHeadLeft  = document.createElement('th');
+    var funcBodyHeadMid   = document.createElement('th');
+    var funcBodyHeadRight = document.createElement('th');
+
+    funcBodyHeadLeft.setAttribute( 'class', 'small-header left' );
+    funcBodyHeadMid.setAttribute( 'class', 'small-header' );
+    funcBodyHeadRight.setAttribute( 'class', 'small-header' );
+
+    funcBodyHeadMid.textContent   = 'Parameter';
+    funcBodyHeadRight.textContent = 'Value';
+
+    funcBodyHeadRow.innerHTML += funcBodyHeadLeft.outerHTML + funcBodyHeadMid.outerHTML + funcBodyHeadRight.outerHTML;
+
+    return funcBodyHeadRow.outerHTML;
+}
+
+function generateFunctionCallHeader (params, call) {
+    var funcCol = document.createElement('th');
+    var numRows = Object.keys(params).length;
+    funcCol.setAttribute( 'rowspan', numRows );
+    funcCol.setAttribute( 'scope', 'rowgroup' );
+    funcCol.setAttribute( 'class', 'func-header' );
+
+    funcCol.textContent = call;
+
+    return funcCol.outerHTML;
 }
