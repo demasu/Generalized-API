@@ -40,8 +40,6 @@ function addRow( type ) {
 }
 
 function addTextDiv ( type ) {
-    var formattedType = type.charAt(0).toUpperCase() + type.slice(1);
-
     // Create elements
     var newOuterDiv = document.createElement('div');
     var newInput    = document.createElement('input');
@@ -51,7 +49,7 @@ function addTextDiv ( type ) {
     newOuterDiv.setAttribute( "class", "col-6" );
 
     newInput.setAttribute( "type", "text" );
-    newInput.setAttribute( "name", `${formattedType} Param ${paramCounts[type]}` );
+    newInput.setAttribute( "name", `${type}-param-${paramCounts[type]}` );
     newInput.setAttribute( "id", `${type}-param-${paramCounts[type]}`);
 
     newLabel.setAttribute( "for", newInput.getAttribute( "id" ) );
@@ -63,8 +61,6 @@ function addTextDiv ( type ) {
 }
 
 function addCheckboxDiv ( type ) {
-    var formattedType = type.charAt(0).toUpperCase() + type.slice(1);
-
     // Create elements
     var outerDiv = document.createElement('div');
     var checkbox = document.createElement('input');
@@ -74,7 +70,7 @@ function addCheckboxDiv ( type ) {
     outerDiv.setAttribute( "class", "col-6" );
 
     checkbox.setAttribute( "type", "checkbox" );
-    checkbox.setAttribute( "name", `${formattedType} Param ${paramCounts[type]}` );
+    checkbox.setAttribute( "name", `${type}-param-${paramCounts[type]}` );
     checkbox.setAttribute( "id", `${type}-param-${paramCounts[type]}` );
 
     label.setAttribute( "for", checkbox.getAttribute("id") );

@@ -107,34 +107,52 @@ function generateTableContents (data) {
     var funcBody        = document.createElement('tbody');
     funcBody.innerHTML += generateFunctionBodyHeader();
 
+    console.log('Iterating over keys...');
     $.each(jsonObj, function(key) {
+        console.log('In the loop');
         var params = jsonObj[key].params;
+        console.log('Params are:');
+        console.log(params);
         var call   = jsonObj[key].call;
+        console.log('Call is:');
+        console.log(call);
         var completed = 0;
+        console.log('Iterating over the parameters');
         $.each(params, function(key) {
+            console.log('In the loop...');
+            console.log('Creating a row');
             var row = document.createElement('tr');
+            console.log('Calling generateParamRow for ' + key);
             var cols = generateParamRow(params[key], completed);
             if ( completed == 0 ) {
+                console.log('Completed is 0');
+                console.log('Calling generateFunctionCallHeader');
                 row.innerHTML += generateFunctionCallHeader(params, call);
                 row.innerHTML += cols[0];
                 row.innerHTML += cols[1];
             }
             else if ( completed % 2 == 0 ) {
+                console.log('Completed is even');
                 row.innerHTML += cols[0];
                 row.innerHTML += cols[1];
             }
             else {
+                console.log('Completed is not even or zero');
                 row.innerHTML += cols[0];
                 row.innerHTML += cols[1];
             }
+            console.log('Adding the row to the funcBody');
             funcBody.innerHTML += row.outerHTML;
             completed++;
         });
     });
 
+    console.log('Adding the funcbody to the innards');
     innards += funcBody.outerHTML;
 
+    console.log('Adding the innards to the table');
     newTable.innerHTML += innards;
+    console.log('Adding the table to the div');
     newDiv.innerHTML += newTable.outerHTML;
 
     $('#form')[0].insertAdjacentHTML( 'afterend', newDiv.outerHTML );
