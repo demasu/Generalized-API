@@ -7,6 +7,6 @@ use lib "$FindBin::Bin/../lib";
 
 
 # use this block if you don't need middleware, and only have a single target Dancer app to run here
-use FormHandler;
+use Generic::API;
 
-FormHandler->to_app;
+Generic::API->to_app;
