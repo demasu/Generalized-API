@@ -7,6 +7,7 @@ use Dancer2 appname => 'Generic::API';
 use FindBin;
 use JSON::MaybeXS ();
 
+use Generic::API::Base;
 use Generic::API::Form::Parse;
 use Generic::API::Output;
 use Generic::API::Output::JSON;
@@ -28,7 +29,7 @@ post '/' => sub {
     my $api_results = Generic::API::Form::Parse::parse($form_data);
     print STDERR "# Routes/Base.pm: \n" . Dumper( \$api_results ) . "\n";
 
-    if ( Generic::API::save_api_data($api_results) ) {
+    if ( Generic::API::Base::save_api_data($api_results) ) {
         send_file 'success.html';
     }
     else {

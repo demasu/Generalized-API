@@ -3,10 +3,10 @@ package Generic::API::File::List;
 use strict;
 use warnings;
 
-use Generic::API;
+use Generic::API::Base;
 
 sub list_apis {
-    my $base_path = Generic::API::get_base_path();
+    my $base_path = Generic::API::Base::get_base_path();
     my $api_dir   = 'apis/';
     my $api_path  = $base_path . $api_dir;
 

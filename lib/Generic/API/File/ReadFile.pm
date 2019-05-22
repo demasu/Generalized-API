@@ -3,6 +3,8 @@ package Generic::API::File::ReadFile;
 use strict;
 use warnings;
 
+use Generic::API::Base;
+
 sub read_file {
     my $file = shift;
 
@@ -32,7 +34,7 @@ sub read_file {
 
 sub _search_dirs {
     my $file = shift;
-    my @dirs = ( Generic::API::get_base_path(), Generic::API::get_api_dir_path() );
+    my @dirs = ( Generic::API::Base::get_base_path(), Generic::API::Base::get_api_dir_path() );
 
     foreach my $dir ( @dirs ) {
         my $full_path = $dir . $file;

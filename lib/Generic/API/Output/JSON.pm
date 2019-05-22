@@ -24,14 +24,6 @@ sub write_to_file {
     return $return;
 }
 
-sub read_from_file {
-    my ($file) = @_;
-
-    my $json = Generic::API::File::ReadFile::read_file( $file );
-
-    return JSON::MaybeXS::decode_json($json);
-}
-
 sub encode {
     my (undef, $data ) = @_;
     # my $data = shift;
