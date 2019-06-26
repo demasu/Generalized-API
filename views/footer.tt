@@ -1,0 +1,25 @@
+                <!-- Footer -->
+                <footer id="footer">
+                    <section>
+                        This is just a test. Don't look too closely.
+                    </section>
+                </footer>
+
+                <!-- Copyright -->
+                <div id="copyright">
+                    <ul><li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+                </div>
+
+        </div>
+
+        <!-- Scripts -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/numberToWords.min.js"></script>
+        <script src="assets/js/main.min.js"></script>
+[% IF custom_js -%]
+    [% FOREACH js IN custom_js -%]
+        <script src="[% js.src %]"></script>
+    [% END -%]
+[% END -%]
+    </body>
+</html>

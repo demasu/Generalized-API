@@ -1,0 +1,9 @@
+[% PROCESS 'header.tt' %]
+[% INCLUDE 'nav.tt' %]
+
+                <!-- Main -->
+                <div id="main">
+                    <h2>Something bad happened. Hit the back button and try again.</h2>
+                </div>
+
+[% PROCESS 'footer.tt' %]

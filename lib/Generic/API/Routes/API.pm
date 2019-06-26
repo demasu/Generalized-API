@@ -9,6 +9,7 @@ use Generic::API::Base;
 use Generic::API::File::List;
 use Generic::API::File::ReadFile;
 use Generic::API::Output;
+use Generic::API::Template::Variables;
 
 get '/api/:api/data' => sub {
     print STDERR "# Routes/API.pm: In the get '/api/:api/data' sub\n";
@@ -21,7 +22,11 @@ get '/api/:api/data' => sub {
         return Generic::API::File::ReadFile::read_file($file);
     }
     else {
-        send_file 'failure.html';
+        my $links = Generic::API::Template::Variables::get_links( 'api' );
+
+        template 'failure.tt', {
+            'links' => $links,
+        };
     }
 };
 

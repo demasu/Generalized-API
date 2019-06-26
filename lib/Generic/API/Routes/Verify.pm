@@ -6,11 +6,20 @@ use warnings;
 use Dancer2 appname => 'Generic::API';
 
 use Generic::API::File::ReadFile;
+use Generic::API::Template::Variables;
 
 get '/verify' => sub {
     print STDERR "# Routes/Verify.pm: In the get '/verify' sub\n";
 
-    send_file 'verify.html';
+    my $links = Generic::API::Template::Variables::get_links( 'verify' );
+    template 'verify.tt', {
+        'links' => $links,
+        'custom_js' => [
+            {
+                src => 'assets/js/verify/verify.js',
+            }
+        ],
+    };
 };
 
 post '/verify' => sub {

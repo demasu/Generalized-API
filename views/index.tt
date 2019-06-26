@@ -1,0 +1,104 @@
+[% PROCESS 'header.tt' %]
+[% INCLUDE 'nav.tt' %]
+
+                <div id="main">
+
+                    <div id="form">
+                        <h2>Enter in the API information</h2>
+                        <form action="/" method="post">
+                            <div class="row gtr-uniform">
+                                <div class="col-6">
+                                    <input type="text" name="base-url" id="base-url" value="" />
+                                    <label for="base-url">API Base URL</label>
+                                </div>
+                                <div class="col-6">
+                                    <input type="text" name="api-name" id="api-name" value="" />
+                                    <label for="api-name">API Name</label>
+                                </div>
+                                <div class="col-12">
+                                    <input type="text" name="username" id="username" value="" />
+                                    <label for="username">API Username</label>
+                                </div>
+                                <div class="col-12">
+                                    <input type="password" name="password" id="password" value="" />
+                                    <label for="password">API Password</label>
+                                </div>
+                                <h3>API Method Options</h3>
+                                <div class="col-12">
+                                    <select name="query-method" id="query-method">
+                                        <option value="">- API Query Method -</option>
+                                        <option value="post">POST</option>
+                                        <option value="get">GET</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <select name="query-type" id="query-type">
+                                        <option value="">- Argument Encoding -</option>
+                                        <option value="form">POST: Form URL Encoded</option>
+                                        <option value="url">GET: URI Encoded Parameters</option>
+                                    </select>
+                                </div>
+                                <h3>Individual Calls</h3>
+                                <br />
+                                <div class="col-12">
+                                    <h4 id="order-heading">Order Call</h4>
+                                    <input type="text" name="order-call" id="order-call">
+                                    <label for="order-call">Method to order an item</label>
+                                </div>
+                                <div class="row gtr-uniform" id="order-param-container">
+                                    <div class="col-6">
+                                        <input type="text" name="order-param-1" id="order-param-1">
+                                        <label for="order-param-1">Parameter One</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="checkbox" name="required-order-param-1" id="required-order-param-1">
+                                        <label for="required-order-param-1">Required</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" name="order-param-2" id="order-param-2">
+                                        <label for="order-param-2">Parameter Two</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="checkbox" name="required-order-param-2" id="required-order-param-2">
+                                        <label for="required-order-param-2">Required</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <a class="button primary small" href="#" id="add-order-param" onclick="addOrderField()">Add Parameter</a>
+                                    </div>
+                                </div>
+                                <div class="col-12"></div>
+                                <div class="col-12">
+                                    <h4>Cancel Call</h4>
+                                    <input type="text" name="cancel-call" id="cancel-call">
+                                    <label for="cancel-call">Method to cancel an item</label>
+                                </div>
+                                <div class="row gtr-uniform" id="cancel-param-container">
+                                    <div class="col-6">
+                                        <input type="text" name="cancel-param-1" id="cancel-param-1">
+                                        <label for="cancel-param-1">Parameter One</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="checkbox" name="required-cancel-param-1" id="require-cancel-param-1">
+                                        <label for="require-cancel-param-1">Required</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" name="cancel-param-2" id="cancel-param-2">
+                                        <label for="cancel-param-2">Parameter Two</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="checkbox" name="required-cancel-param-2" id="require-cancel-param-2">
+                                        <label for="require-cancel-param-2">Required</label>
+                                    </div>
+                                    <div class="col-12">
+                                        <a class="button primary small" href="#" id="add-cancel-param" onclick="addCancelField()">Add Parameter</a>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <input class="primary" type="submit" value="Save" id="submit-button">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+[% PROCESS 'footer.tt' %]

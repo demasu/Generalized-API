@@ -1,3 +1,4 @@
+/*jshint esversion:6*/
 var apiData;
 
 function getAPIData (api) {
@@ -16,7 +17,7 @@ var apiList;
 
 $(document).ready(function() {
     $.ajax({
-        url: `/api/list`,
+        url: 'https://astudyinfutility.com/fancy/api/list',
         dataType: 'json',
     })
     .done(function(data) {
@@ -25,8 +26,10 @@ $(document).ready(function() {
             addOption(item);
         });
     })
-    .fail(function() {
+    .fail(function(jqxhr, textstatus, errorthrown) {
         console.log("Failure happened");
+        console.log("Error is");
+        console.log(textstatus);
         return "Failure";
     });
 
@@ -35,7 +38,7 @@ $(document).ready(function() {
     // Bind to events
     $('#submit-button').click(function(e) {
         $.ajax({
-            url: '/verify',
+            url: 'https://astudyinfutility.com/fancy/verify',
             type: 'POST',
             data: $('#api-selector').serialize(),
             success: function(msg) {

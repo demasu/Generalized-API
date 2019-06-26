@@ -11,14 +11,18 @@ use Generic::API::Base;
 use Generic::API::Form::Parse;
 use Generic::API::Output;
 use Generic::API::Output::JSON;
+use Generic::API::Template::Variables;
 
 use Data::Dumper;
 $Data::Dumper::Indent = 3;
 
 get '/' => sub {
     print STDERR "# Routes/Base.pm: In the get '/' sub\n";
+    my $links = Generic::API::Template::Variables::get_links( 'input' );
 
-    send_file 'index.html';
+    template 'index.tt', {
+        'links' => $links,
+    };
 };
 
 post '/' => sub {
@@ -29,12 +33,22 @@ post '/' => sub {
     my $api_results = Generic::API::Form::Parse::parse($form_data);
     print STDERR "# Routes/Base.pm: \n" . Dumper( \$api_results ) . "\n";
 
+    my $links = Generic::API::Template::Variables::get_links( 'input' );
+
     if ( Generic::API::Base::save_api_data($api_results) ) {
-        send_file 'success.html';
+        template 'success.tt', {
+            'links' => $links,
+        };
     }
     else {
-        send_file 'failure.html';
+        template 'failure.tt', {
+            'links' => $links,
+        };
     }
+};
+
+get '/elements' => sub {
+    send_file 'elements.html';
 };
 
 start;

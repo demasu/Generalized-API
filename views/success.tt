@@ -1,0 +1,9 @@
+[% PROCESS 'header.tt' %]
+[% INCLUDE 'nav.tt' %]
+
+                <!-- Main -->
+                <div id="main">
+                    <h2>Success!</h2>
+                </div>
+
+[% PROCESS 'footer.tt' %]
