@@ -7,7 +7,7 @@
                         <!-- <h2>Which API do you want to test?</h2> -->
                         <label for="api">Which API do you want to test?</label>
                         <form id="api-selector">
-                            <div class="row gtr-uniform">
+                            <div class="row gtr-uniform" id="form-row-container">
                                 <div class="col-12">
                                     <select name="api" id="api-list">
                                         <option value="">- Select API -</option>

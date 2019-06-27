@@ -21,6 +21,9 @@ var functionListContainerHTML = `
 //var submitButton = $('#submit-button');
 //submitButton[0].insertAdjacentHTML( 'beforebegin', valueListContainerHTML );
 
+var typingTimer;                // Timer identifier
+var doneTypingInterval = 100;   // Time in milliseconds
+
 function getAPIData (api) {
     $.ajax({
         url: `/api/${api}/data`,
@@ -60,6 +63,35 @@ $(document).ready(function() {
         console.log('Dropdown was changed');
         updateForm( $('#api-list') );
     });
+    $('#form-row-container').on('change', '#func-list-container', function() {
+        console.log('Function dropdown was changed');
+        updateForm( $('#func-list') );
+    });
+    $('#form-row-container').on('keyup', '#value-list-container', function() {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTyping, doneTypingInterval);
+    });
+    $('#form-row-container').on('keydown', '#value-list-container', function() {
+        clearTimeout(typingTimer);
+    });
+
+    $('#submit-button').click(function() {
+        //return false;
+        // TODO: Add functionality
+        // Probably AJAX call to run the thing
+        // Load a spinner
+        // Maybe redirect to a results page?
+        // Maybe have a modal to show the results?
+        $.ajax({
+            url: 'https://astudyinfutility.com/fancy/test',
+            type: 'POST',
+            data: $('#api-selector').serialize(),
+            success: function(msg) {
+                generateTableContents(msg);
+            }
+        });
+        return false;
+    });
 });
 
 function addOption (item) {
@@ -82,7 +114,11 @@ function updateForm (element) {
     if ( fetchingData ) {
         return false;
     }
+    console.log('Element is:');
+    console.log(element);
+    console.log('Checking the selection');
     if ( checkSelection(element) ) {
+        console.log('checkSelection returned true');
         // Do something good
         var apiOptionRegex   = /api/i;
         var funcOptionRegex  = /function/i;
@@ -90,9 +126,11 @@ function updateForm (element) {
         var elementName      = element[0].name.toString();
 
         if ( elementName.match(apiOptionRegex) ) {
+            console.log('element name matched the api option regex');
             updateFunctionList();
         }
         else if ( elementName.match(funcOptionRegex) ) {
+            console.log('element name matched the function option regex');
             updateValueList();
         }
         else if ( elementName.match(valueOptionRegex) ) {
@@ -101,16 +139,50 @@ function updateForm (element) {
         }
     }
     else {
+        console.log('checkSelection returned false');
         // Do something bad
         return false;
     }
 }
 
+function updateFunctionList () {
+    var submitButton = $('#submit-button');
+    submitButton[0].insertAdjacentHTML( 'beforebegin', functionListContainerHTML );
+
+    var funcListOption = $('#func-list');
+    var optionHTML = '<option value="4">- Added Option -</option>';
+
+    funcListOption[0].insertAdjacentHTML( 'beforeend', optionHTML );
+}
+
+function updateValueList () {
+    var submitButton = $('#submit-button');
+    submitButton[0].insertAdjacentHTML( 'beforebegin', valueListContainerHTML );
+}
+
 function checkSelection (element) {
+    console.log('In checkSelection');
+    console.log('Element is:');
+    console.log(element);
     if ( element.val() == '' ) {
+        console.log('Value equaled \'\'');
+        $('#submit-button').prop('disabled', true);
         return false;
     }
     else {
+        console.log('Value did not equal \'\'');
         return true;
     }
+}
+
+function enableSubmitButton () {
+    console.log('Enabling the submit button');
+    $('#submit-button').prop('disabled', false);
+}
+
+function doneTyping () {
+    console.log('User stopped typing');
+
+    console.log('Calling updateForm');
+    updateForm( $('#func-value') );
 }
