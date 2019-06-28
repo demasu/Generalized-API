@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Generic::API::Base;
+use JSON::MaybeXS;
 
 sub read_file {
     my $file = shift;
@@ -29,7 +30,9 @@ sub read_file {
     print STDERR "# ReadFile.pm: JSON content is:\n";
     print STDERR "# ReadFile.pm: read_file: \n" . Dumper( \$json ) . "\n";
 
-    return $json;
+    my $data = decode_json($json);
+
+    return $data;
 }
 
 sub _search_dirs {

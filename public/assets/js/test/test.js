@@ -87,7 +87,8 @@ $(document).ready(function() {
             type: 'POST',
             data: $('#api-selector').serialize(),
             success: function(msg) {
-                generateTableContents(msg);
+                console.log('Message is:');
+                console.log(msg);
             }
         });
         return false;
@@ -146,13 +147,57 @@ function updateForm (element) {
 }
 
 function updateFunctionList () {
+    var functions = getFunctionData();
+    addFunctionsToDropdown(functions);
+}
+
+function getFunctionData () {
+    console.log('In getFunctionData');
+
+    var options;
+    $.ajax({
+        beforeSend: function(){fetchingData = 1;},
+        url: 'https://astudyinfutility.com/fancy/test/functions',
+        dataType: 'json',
+        async: false,
+        method: 'POST',
+        data: $('#api-list').serialize(),
+        success: function(msg) {
+            console.log('Returned data is:');
+            console.log(msg);
+            options = msg;
+            fetchingData = 0;
+        },
+    })
+    .fail(function(jqxhr, textstatus, errorthrown) {
+        console.log("Failure happened");
+        console.log("Error is");
+        console.log(textstatus);
+        fetchingData = 0;
+        return "Failure";
+    });
+
+    console.log('Out of the ajax call');
+    console.log('options is:');
+    console.log(options);
+    console.log('End of getFunctionData');
+
+    return options;
+}
+
+function addFunctionsToDropdown (functions) {
+    console.log('In addFunctionsToDropdown');
+    console.log('Functions are:');
+    console.log(functions);
     var submitButton = $('#submit-button');
     submitButton[0].insertAdjacentHTML( 'beforebegin', functionListContainerHTML );
 
     var funcListOption = $('#func-list');
-    var optionHTML = '<option value="4">- Added Option -</option>';
-
-    funcListOption[0].insertAdjacentHTML( 'beforeend', optionHTML );
+    functions.forEach(function(name) {
+        var optionHTML = `<option value="${name}">${name}</option>`;
+        funcListOption[0].insertAdjacentHTML( 'beforeend', optionHTML );
+    });
+    console.log('Done with addFunctionsToDropdown');
 }
 
 function updateValueList () {
