@@ -34,6 +34,7 @@ post '/test' => sub {
 
     my $interactor = Generic::API::Interactor::Base->new( $form_data );
     my $data       = $interactor->load_api();
+    #my $result     = $interactor->perform_call();
 
     return 'Success!'; # ¯\_(ツ)_/¯
 };
@@ -51,6 +52,23 @@ post '/test/functions' => sub {
     print STDERR "# Test.pm: get '/test/functions': \n" . Dumper( \$functions ) . "\n";
 
     my $json = Generic::API::Output::encode( $functions, 'json' );
+
+    return $json;
+};
+
+post '/test/parameters' => sub {
+    my $data = params;
+    use Data::Dumper;
+    $Data::Dumper::Indent = 3;
+    print STDERR "# Test.pm: Data is:\n";
+    print STDERR "# Test.pm: post '/test/parameters': \n" . Dumper( \$data ) . "\n";
+
+    my $interactor = Generic::API::Interactor::Base->new( $data );
+    my $parameters = $interactor->get_param_list();
+    print STDERR "# Test.pm: Parameters are\n";
+    print STDERR "# Test.pm: post '/test/parameters': \n" . Dumper( \$parameters ) . "\n";
+
+    my $json = Generic::API::Output::encode( $parameters, 'json' );
 
     return $json;
 };

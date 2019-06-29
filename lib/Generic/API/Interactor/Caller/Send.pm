@@ -3,7 +3,12 @@ package Generic::API::Interactor::Caller::Send;
 use strict;
 use warnings;
 
-use LWP::UserAgent;
+use Generic::API::Interactor::Mock;
+
+use Test::MockModule; # Since we don't want to actually send out with this proof of concept
+my $mlwp = Test::MockModule->new('LWP::UserAgent');
+$mlwp->mock( 'post' => Generic::API::Interactor::Mock::mock_post() );
+$mlwp->mock( 'get'  => Generic::API::Interactor::Mock::mock_get()  );
 
 sub setup {
     my $ua = LWP::UserAgent->new(timeout => 10);
