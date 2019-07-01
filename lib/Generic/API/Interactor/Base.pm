@@ -3,6 +3,7 @@ package Generic::API::Interactor::Base;
 use strict;
 use warnings;
 
+use Generic::API::Input::JSON;
 use Generic::API::Interactor::Caller;
 use Generic::API::File::ReadFile;
 
@@ -31,6 +32,7 @@ sub load_api {
     my ($self) = @_;
 
     my $data = Generic::API::File::ReadFile::read_file( $self->{'api'} );
+    $data    = Generic::API::Input::JSON::decode($data);
     $self->{'api_data'} = $data;
 
     return $data;
@@ -77,9 +79,22 @@ sub perform_call {
     my $call_type = $self->{'api_data'}->{'query_method'};
     my $args      = {
         method   => $self->{'function'},
-        params   => $self->{'func-value'},
-        api_data => $self->{'api_data'},
+        params   => [],
+        api_data => delete $self->{'api_data'},
     };
+    my @values = grep { $_ =~ /value-for-/ } keys( %{$self} );
+    foreach my $val ( @values ) {
+        if ( $val =~ /value-for-(.+)/ ) {
+            my %obj = (
+                $1 => $self->{$val},
+            );
+            push @{$args->{params}}, \%obj;
+        }
+    }
+    print STDERR "# Base.pm: Values are:\n";
+    print STDERR "# Base.pm: perform_call: \n" . Dumper( \@values ) . "\n";
+    print STDERR "# Base.pm: Args is:\n";
+    print STDERR "# Base.pm: perform_call: \n" . Dumper( \$args ) . "\n";
     my $result    = Generic::API::Interactor::Caller::call_out( $call_type, $args );
 
     if ( $result eq 'Method unknown' ) {
@@ -119,6 +134,7 @@ sub _validate_args {
             $message =~ s/\s+to\s+(did)/ $1/;
             die "$message\n";
         },
+        'allow_extra' => 1,
     );
 
     return 1;

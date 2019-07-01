@@ -12,11 +12,11 @@ sub read_from_file {
 
     my $json = Generic::API::File::ReadFile::read_file( $file );
 
-    return decode(undef, $json);
+    return decode($json);
 }
 
 sub decode {
-    my (undef, $data ) = @_;
+    my ($data) = @_;
     use Data::Dumper;
     $Data::Dumper::Indent = 3;
     print STDERR "# Input/JSON.pm: Data sent in is:\n";

@@ -30,7 +30,7 @@ sub read_file {
     print STDERR "# ReadFile.pm: JSON content is:\n";
     print STDERR "# ReadFile.pm: read_file: \n" . Dumper( \$json ) . "\n";
 
-    my $data = decode_json($json);
+    my $data = $json;
 
     return $data;
 }

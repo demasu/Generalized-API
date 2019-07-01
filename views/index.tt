@@ -5,7 +5,7 @@
 
                     <div id="form">
                         <h2>Enter in the API information</h2>
-                        <form action="/" method="post">
+                        <form action="//astudyinfutility.com/fancy/" method="post">
                             <div class="row gtr-uniform">
                                 <div class="col-6">
                                     <input type="text" name="base-url" id="base-url" value="" />

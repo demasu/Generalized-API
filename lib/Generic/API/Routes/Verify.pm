@@ -23,6 +23,7 @@ get '/verify' => sub {
 };
 
 post '/verify' => sub {
+    print STDERR "# Verify.pm: In the post '/verify' sub\n";
     my $data = params;
     my $file = $data->{'api'};
     my $contents = Generic::API::File::ReadFile::read_file($file);

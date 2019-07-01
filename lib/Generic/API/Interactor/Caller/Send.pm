@@ -26,13 +26,15 @@ sub send_request {
         get  => \&get,
     );
 
-    my $response = $verbs{$method}->( $ua, $request->{url}, $request->{data} );
-    if ( $response->is_success ) {
-        return $response->decoded_content;
-    }
-    else {
-        return "There was an error communicating with the endpoint. " . $response->status_line;
-    }
+    print STDERR "# Send.pm: Url is: [" . $request->{url} . "]\n";
+    print STDERR "# Send.pm: Data is: [" . $request->{data} . "]\n";
+    #my $response = $verbs{$method}->( $ua, $request->{url}, $request->{data} );
+    #if ( $response->is_success ) {
+    #    return $response->decoded_content;
+    #}
+    #else {
+    #    return "There was an error communicating with the endpoint. " . $response->status_line;
+    #}
 }
 
 sub post {

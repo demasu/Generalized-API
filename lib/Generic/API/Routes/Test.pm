@@ -32,10 +32,14 @@ post '/test' => sub {
     print STDERR "# Test.pm: Form data is:\n";
     print STDERR "# Test.pm: post '/test': \n" . Dumper( \$form_data ) . "\n";
 
+    print STDERR "# Test.pm: Getting the Interactor base\n";
     my $interactor = Generic::API::Interactor::Base->new( $form_data );
+    print STDERR "# Test.pm: Loading the API\n";
     my $data       = $interactor->load_api();
-    #my $result     = $interactor->perform_call();
+    print STDERR "# Test.pm: Performing the call\n";
+    my $result     = $interactor->perform_call();
 
+    print STDERR "# Test.pm: Returning\n";
     return 'Success!'; # ¯\_(ツ)_/¯
 };
 
