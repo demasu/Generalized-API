@@ -40,7 +40,7 @@ post '/test' => sub {
     my $result     = $interactor->perform_call();
 
     print STDERR "# Test.pm: Returning\n";
-    return 'Success!'; # ¯\_(ツ)_/¯
+    return $result; # ¯\_(ツ)_/¯
 };
 
 post '/test/functions' => sub {

@@ -48,9 +48,6 @@ $(document).ready(function() {
         fetchingData = 0;
     })
     .fail(function(jqxhr, textstatus, errorthrown) {
-        console.log("Failure happened");
-        console.log("Error is");
-        console.log(textstatus);
         fetchingData = 0;
         return "Failure";
     });
@@ -58,11 +55,9 @@ $(document).ready(function() {
     disableSubmitButton();
 
     $('#api-list').change(function() {
-        console.log('Dropdown was changed');
         updateForm( $('#api-list') );
     });
     $('#form-row-container').on('change', '#func-list-container', function() {
-        console.log('Function dropdown was changed');
         updateForm( $('#func-list') );
     });
     $('#form-row-container').on('keyup', '#value-list-container', function() {
@@ -82,23 +77,38 @@ $(document).ready(function() {
         clearTimeout(typingTimer);
     });
 
+    $('#results-modal').dialog({
+        autoOpen: false,
+        resizable: true,
+        modal: true,
+        buttons: {
+            Ok: function() {
+                $( this ).dialog( "close" );
+            }
+        },
+        maxHeight: 1200,
+        maxWidth: 1500,
+        minHeight: 200,
+        minWidth: 200,
+        height: 800,
+        width: 1000,
+    });
+
     $('#submit-button').click(function() {
-        //return false;
-        // TODO: Add functionality
-        // Probably AJAX call to run the thing
-        // Load a spinner
-        // Maybe redirect to a results page?
-        // Maybe have a modal to show the results?
         $.ajax({
             beforeSend: validateForms(),
             url: 'https://astudyinfutility.com/fancy/test',
             type: 'POST',
             data: $('#api-selector').serialize(),
             success: function(msg) {
-                console.log('Message is:');
-                console.log(msg);
+                displayResult(msg);
             }
         });
+        return false;
+    });
+
+    $('#reset-button').click(function() {
+        clearForm(true);
         return false;
     });
 });
@@ -118,47 +128,32 @@ function addOption (item) {
 }
 
 function updateForm (element) {
-    console.log('Fetching data is:');
-    console.log(fetchingData);
     if ( fetchingData ) {
         return false;
     }
-    console.log('Element is:');
-    console.log(element);
-    console.log('Checking the selection');
     if ( checkSelection(element) ) {
-        console.log('checkSelection returned true');
-        // Do something good
         var apiOptionRegex   = /api/i;
         var funcOptionRegex  = /function/i;
         var valueOptionRegex = /value-for/i;
         var elementName      = element[0].name.toString();
 
         if ( elementName.match(apiOptionRegex) ) {
-            console.log('element name matched the api option regex');
+            clearForm(false);
             updateFunctionList();
         }
         else if ( elementName.match(funcOptionRegex) ) {
-            console.log('element name matched the function option regex');
             updateValueList();
         }
         else if ( elementName.match(valueOptionRegex) ) {
-            console.log('Matched the value option regex');
             if ( validateAllParams() ) {
-                console.log('validateAllParams returned true');
                 enableSubmitButton();
             }
             else {
                 disableSubmitButton();
             }
         }
-        else {
-            console.log('Did not match anything');
-        }
     }
     else {
-        console.log('checkSelection returned false');
-        // Do something bad
         return false;
     }
 }
@@ -173,7 +168,6 @@ function updateFunctionList () {
 }
 
 function getFunctionData () {
-    console.log('In getFunctionData');
 
     var options;
     $.ajax({
@@ -184,33 +178,20 @@ function getFunctionData () {
         method: 'POST',
         data: $('#api-list').serialize(),
         success: function(msg) {
-            console.log('Returned data is:');
-            console.log(msg);
             options = msg;
             fetchingData = 0;
             validAPI = true;
         },
     })
     .fail(function(jqxhr, textstatus, errorthrown) {
-        console.log("Failure happened");
-        console.log("Error is");
-        console.log(textstatus);
         fetchingData = 0;
         return "Failure";
     });
-
-    console.log('Out of the ajax call');
-    console.log('options is:');
-    console.log(options);
-    console.log('End of getFunctionData');
 
     return options;
 }
 
 function addFunctionsToDropdown (functions) {
-    console.log('In addFunctionsToDropdown');
-    console.log('Functions are:');
-    console.log(functions);
     var submitButton = $('#button-container');
     submitButton[0].insertAdjacentHTML( 'beforebegin', functionListContainerHTML );
 
@@ -219,7 +200,6 @@ function addFunctionsToDropdown (functions) {
         var optionHTML = `<option value="${name}">${name}</option>`;
         funcListOption[0].insertAdjacentHTML( 'beforeend', optionHTML );
     });
-    console.log('Done with addFunctionsToDropdown');
 }
 
 function updateValueList () {
@@ -232,12 +212,9 @@ function updateValueList () {
 }
 
 function getParameterData () {
-    console.log('In getParameterData');
 
     var options;
     var postData = $('#api-list').serialize() + '&' + $('#func-list').serialize();
-    console.log('Post data is:');
-    console.log(postData);
 
     $.ajax({
         beforeSend: function(){fetchingData = 1;},
@@ -247,34 +224,22 @@ function getParameterData () {
         method: 'POST',
         data: postData,
         success: function(msg) {
-            console.log('Returned data is:');
-            console.log(msg);
             options = msg;
             fetchingData = 0;
             validFunction = true;
         },
     })
     .fail(function(jqxhr, textstatus, errorthrown) {
-        console.log("Failure happened");
-        console.log("Error is");
-        console.log(textstatus);
         fetchingData = 0;
         return "Failure";
     });
-
-    console.log('Out of the ajax call');
-    console.log('options is:');
-    console.log(options);
-    console.log('End of getParameterData');
 
     return options;
 }
 
 function addParametersToPage (parameters) {
-    console.log('In addParametersToPage');
     var submitButton = $('#button-container');
 
-    console.log('Iterating over the parameters');
     parameters.forEach(function(obj) {
         var newContainerDiv = document.createElement('div');
         newContainerDiv.setAttribute( 'class', 'col-12' );
@@ -313,34 +278,25 @@ function addParametersToPage (parameters) {
 
         submitButton[0].insertAdjacentHTML( 'beforebegin', newContainerDiv.outerHTML );
     });
-    console.log('Done iterating');
 }
 
 function checkSelection (element) {
-    console.log('In checkSelection');
-    console.log('Element is:');
-    console.log(element);
-
     var paramRegex = /value-for/;
 
     if ( element.attr('id').match(paramRegex) ) {
-        console.log('Matched the param regex');
         return true;
     }
 
     if ( element.val() == '' ) {
-        console.log('Value equaled \'\'');
         disableSubmitButton();
         return false;
     }
     else {
-        console.log('Value did not equal \'\'');
         return true;
     }
 }
 
 function enableSubmitButton () {
-    console.log('Enabling the submit button');
     $('#submit-button').prop('disabled', false);
 }
 
@@ -349,48 +305,27 @@ function disableSubmitButton () {
 }
 
 function doneTyping (element) {
-    console.log('User stopped typing');
-
-    console.log('Calling updateForm');
     updateForm( $(`#${element.id}`) );
 }
 
 function validateAllParams () {
     var params = $('[id*="-param-"]');
-    console.log('Params is:');
-    console.log(params);
 
     var length = params.length;
-    console.log('Length is:');
-    console.log(length);
 
     var valid = false;
-    console.log('Iterating over params');
     $.each(params, function(key) {
-        console.log('Key is:');
-        console.log(key);
-        console.log('params[key] is:');
-        console.log(params[key]);
         var id = params[key].id;
         var children = $(`#${id}`).children('input');
-        console.log('Iterating over children');
         $.each(children, function(key) {
-            console.log('Key is:');
-            console.log(key);
             var elem = $(`#${children[key].id}`);
             var requiredRegex = /required-value/;
-            console.log('ID is:');
-            console.log(elem.attr('id'));
             var id = elem.attr('id');
             if ( elem.attr('id').match(requiredRegex) ) {
-                console.log('Matched required regex');
                 if ( elem.val() == '' ) {
-                    console.log('Value of element is empty');
                     valid = false;
                 }
                 else {
-                    console.log('Value is:');
-                    console.log(elem.val());
                     valid = true;
                 }
             }
@@ -403,4 +338,53 @@ function validateAllParams () {
 
 function validateForms () {
     return false;
+}
+
+function displayResult (data) {
+    try {
+        var json = JSON.parse(data);
+        var jsonString = JSON.stringify(json, undefined, 4);
+        var formattedHTML = syntaxHighlight(jsonString);
+        $('#results-modal > pre').html(formattedHTML);
+        $('#results-modal').dialog('open');
+    }
+    catch (e) {
+        var error = 'There was an error formatting the result:\n';
+        error    += e;
+        $('#results-modal > pre').insertAdjacentHTML('beforeend', error);
+    }
+
+    return false;
+}
+
+function syntaxHighlight (json) {
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        var cls = 'number';
+        if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+                cls = 'key';
+            } else {
+                cls = 'string';
+            }
+        } else if (/true|false/.test(match)) {
+            cls = 'boolean';
+        } else if (/null/.test(match)) {
+            cls = 'null';
+        }
+        return '<span class="' + cls + '">' + match + '</span>';
+    });
+}
+
+function clearForm (fullReset) {
+    if ( fullReset ) {
+        $('#api-list').val('');
+    }
+    var functionDropdown = $('#func-list-container');
+    var paramContainers  = $('[id*="-param-container"]');
+
+    functionDropdown.remove();
+    paramContainers.remove();
+
+    $('#submit-button').prop('disabled', true);
 }

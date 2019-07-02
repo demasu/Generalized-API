@@ -19,11 +19,11 @@ sub call_out {
     $method = lc($method);
     if ( $method eq 'post' ) {
         print STDERR "# Caller.pm: Method was post\n";
-        Generic::API::Interactor::Caller::Post::send_request( $args );
+        return Generic::API::Interactor::Caller::Post::send_request( $args );
     }
     elsif ( $method eq 'get') {
         print STDERR "# Caller.pm: Method was get\n";
-        Generic::API::Interactor::Caller::Get::send_request( $args );
+        return Generic::API::Interactor::Caller::Get::send_request( $args );
     }
     else {
         print STDERR "# Caller.pm: Method was unknown\n";

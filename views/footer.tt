@@ -16,6 +16,7 @@
         <script src="assets/js/jquery.min.js"></script>
         <script src="assets/js/numberToWords.min.js"></script>
         <script src="assets/js/main.min.js"></script>
+        <script src="/assets/js/jquery-ui-1.12.1/jquery-ui.min.js"></script>
 [% IF custom_js -%]
     [% FOREACH js IN custom_js -%]
         <script src="[% js.src %]"></script>

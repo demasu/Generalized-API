@@ -13,12 +13,20 @@
                                         <option value="">- Select API -</option>
                                     </select>
                                 </div>
-                                <div class="col-12" id="button-container">
+                                <div class="col-6" id="button-container">
                                     <input class="primary" type="submit" value="Test" id="submit-button" disabled="disabled">
+                                </div>
+                                <div class="col-6" id="reset-button-container">
+                                    <input type="submit" value="Reset" id="reset-button">
                                 </div>
                             </div>
                         </form>
                     </div>
+                </div>
+
+                <div id="results-modal" class="info-modal" title="Query Results" style="display: none">
+                <pre>
+                </pre>
                 </div>
 
 [% PROCESS 'footer.tt' %]

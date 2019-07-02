@@ -1,0 +1,1 @@
+{"password":"password","order":{"params":[{"required":"on","name":"product"},{"required":null,"name":"quantity"}],"call":"order"},"base_url":"https://example.com","query_method":"post","cancel":{"params":[{"required":null,"name":"ip_address"},{"required":"on","name":"license_key"}],"call":"cancel"},"username":"username"}

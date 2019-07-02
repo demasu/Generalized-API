@@ -1,4 +1,5 @@
 @import url(font-awesome.min.css);
+@import url(https://fonts.googleapis.com/css?family=Merriweather:300,700,300italic,700italic|Source+Sans+Pro:900);
 
 /*
     Massively by HTML5 UP
@@ -4884,4 +4885,41 @@ body.is-preload #intro:not(.hidden)+#header+#nav {
 
 table.alt tbody tr td {
     border-color: #cfcfcf;
+}
+
+/*
+ * Syntax highlighting
+ */
+ pre {
+     outline: 1px solid #ccc;
+     padding: 5px;
+     margin: 5px;
+ }
+
+ .string {
+     color: green;
+ }
+
+ .number {
+     color: darkorange;
+ }
+
+ .boolean {
+     color: blue;
+ }
+
+ .null {
+     color: magenta;
+ }
+
+ .key {
+     color: red;
+ }
+
+/*
+ * Making the modal mask darker
+ */
+.ui-widget-overlay {
+    background: #000 !important;
+    opacity: 0.8 !important;
 }
