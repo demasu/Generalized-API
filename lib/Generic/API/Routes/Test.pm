@@ -16,7 +16,7 @@ get '/test' => sub {
         'links' => $links,
         'custom_js' => [
             {
-                src => 'assets/js/test/test.js',
+                src => 'assets/js/test/test.min.js',
             },
         ],
     };

@@ -1,0 +1,1 @@
+{"password":"password","order":{"params":[{"required":"on","name":"product_type"},{"required":null,"name":"quantity"}],"call":"order"},"base_url":"https://example.tld","query_method":"post","cancel":{"params":[{"required":"on","name":"license_key"},{"required":null,"name":"ip_address"}],"call":"cancel"},"username":"username"}
