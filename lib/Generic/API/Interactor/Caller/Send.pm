@@ -5,6 +5,8 @@ use warnings;
 
 use Generic::API::Interactor::Mock;
 
+use LWP::UserAgent;
+
 sub setup {
     my $ua = LWP::UserAgent->new(timeout => 10);
     $ua->agent('Mozilla/5.0');
