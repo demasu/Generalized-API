@@ -25,10 +25,6 @@ sub read_file {
         <$fh>;
     };
     close $fh;
-    use Data::Dumper;
-    $Data::Dumper::Indent = 3;
-    print STDERR "# ReadFile.pm: JSON content is:\n";
-    print STDERR "# ReadFile.pm: read_file: \n" . Dumper( \$json ) . "\n";
 
     my $data = $json;
 

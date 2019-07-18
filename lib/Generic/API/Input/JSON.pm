@@ -17,10 +17,6 @@ sub read_from_file {
 
 sub decode {
     my ($data) = @_;
-    use Data::Dumper;
-    $Data::Dumper::Indent = 3;
-    print STDERR "# Input/JSON.pm: Data sent in is:\n";
-    print STDERR "# Input/JSON.pm: encode: \n" . Dumper( \@_ ) . "\n";
 
     my $json = JSON::MaybeXS::decode_json($data);
 

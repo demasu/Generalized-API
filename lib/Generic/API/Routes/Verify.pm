@@ -9,8 +9,6 @@ use Generic::API::File::ReadFile;
 use Generic::API::Template::Variables;
 
 get '/verify' => sub {
-    print STDERR "# Routes/Verify.pm: In the get '/verify' sub\n";
-
     my $links = Generic::API::Template::Variables::get_links( 'verify' );
     template 'verify.tt', {
         'links' => $links,
@@ -23,7 +21,6 @@ get '/verify' => sub {
 };
 
 post '/verify' => sub {
-    print STDERR "# Verify.pm: In the post '/verify' sub\n";
     my $data = params;
     my $file = $data->{'api'};
     my $contents = Generic::API::File::ReadFile::read_file($file);

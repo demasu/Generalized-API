@@ -11,18 +11,13 @@ use Data::Dumper;
 $Data::Dumper::Indent = 3;
 
 get '/' => sub {
-    print STDERR "# FormHandler.pm: In the get '/' sub\n";
-
     send_file 'index.html';
 };
 
 post '/' => sub {
-    print STDERR "# FormHandler.pm: In the post '/' sub\n";
     my $stuff = params;
-    print STDERR "# form_handler.pl: \n" . Dumper( \$stuff ) . "\n";
 
     my $api_results = parse_form($stuff);
-    print STDERR "# FormHandler.pm: \n" . Dumper( \$api_results ) . "\n";
 
     if ( write_to_json($api_results) ) {
         send_file 'success.html';
@@ -34,14 +29,12 @@ post '/' => sub {
 };
 
 get '/verify' => sub {
-    print STDERR "# FormHandler.pm: In the get '/verify' sub\n";
 
     send_file 'verify.html';
 };
 
 post '/verify' => sub {
     my $stuff = params;
-    print STDERR "# FormHandler.pm: post '/verify': \n" . Dumper( \$stuff ) . "\n";
     my $file = $stuff->{'api'};
     my $data = read_from_file($file);
     return $data;
@@ -66,11 +59,8 @@ get '/api/:api/data' => sub {
 };
 
 get '/api/list' => sub {
-    print STDERR "# FormHandler.pm: In the api/list sub\n";
     my $list = get_api_list();
-    print STDERR "# FormHandler.pm: Got the list\n";
     my $json = JSON::MaybeXS::encode_json($list);
-    print STDERR "# FormHandler.pm: Converted to JSON\n";
 
     return $json;
 };
@@ -153,14 +143,11 @@ sub get_api_list {
     while ( my $file = readdir($dir) ) {
         next if $file eq '.';
         next if $file eq '..';
-        print STDERR "# FormHandler.pm: File is: $file\n";
         if ( -f ($path . $file) ) {
             push @files, $file;
         }
     }
     closedir $dir;
-    print STDERR "# FormHandler.pm: Files are:\n";
-    print STDERR "# FormHandler.pm: get_api_list: \n" . Dumper( \@files ) . "\n";
 
     return \@files;
 }
@@ -182,22 +169,3 @@ sub read_from_file {
 }
 
 1;
-
-__END__
-
-Structure of the params return:
-{
-    'base-url' => 'https://example.tld',
-    'query-method' => 'post',
-    'order-param-2' => 'asdf',
-    'order-call' => 'asdf',
-    'username' => 'asdfa',
-    'cancel-param-2' => 'asdf',
-    'required-order-param-1' => 'on',
-    'cancel-call' => 'as',
-    'password' => 'asdfasdf',
-    'cancel-param-1' => 'asdf',
-    'order-param-1' => 'asdf',
-    'required-cancel-param-2' => 'on',
-    'query-type' => 'form'
-};

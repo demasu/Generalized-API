@@ -9,9 +9,6 @@ use Generic::API::File::ReadFile;
 
 use Params::Validate;
 
-use Data::Dumper;
-$Data::Dumper::Indent = 3;
-
 sub new {
     my ($package, $args) = @_;
 
@@ -65,9 +62,6 @@ sub get_param_list {
         push @parameters, $param;
     }
 
-    print STDERR "# Base.pm: parameters are:\n";
-    print STDERR "# Base.pm: get_param_list: \n" . Dumper( \@parameters ) . "\n";
-
     return \@parameters;
 }
 
@@ -88,8 +82,6 @@ sub perform_call {
             $args->{params}->{$1} = $self->{$val};
         }
     }
-    print STDERR "# Base.pm: Args is:\n";
-    print STDERR "# Base.pm: perform_call: \n" . Dumper( \$args ) . "\n";
     my $result    = Generic::API::Interactor::Caller::call_out( $call_type, $args );
 
     if ( $result eq 'Method unknown' ) {
